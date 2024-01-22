@@ -23,3 +23,17 @@ async def get_item(date:str,celsius:float):
     print(f"日期:{date}")
     print(f"溫度:{celsius}")
     return {"日期":date,"攝氏溫度":celsius}
+
+fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
+
+
+@app.get("/items/")
+async def read_item(skip: int = 0, limit: int = 10):
+    return fake_items_db[skip : skip + limit]
+
+@app.get("/pico_w/{date}")
+async def read_item(date:str ,address:str, celusius:float=0.0):
+    print(f"日期":{date}")
+    print(f"日期":{address}")
+    print(f"日期":{celsius}")
+    return{"狀態"::"儲存成功"}
