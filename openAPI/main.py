@@ -22,7 +22,7 @@ def counter(c:int):
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
-
+'''
 #將PICO資料上傳到redis
 @app.get("/pico_w/{date}")
 async def read_item(date:str ,address:str,celsius:float,light:float):
@@ -45,3 +45,19 @@ async def read_item(date:str ,address:str,celsius:float,light:float):
     print(light_get)
     
     return {"狀態":"儲存成功"}
+'''
+
+@app.get("/pico_w/")
+async def read_item(count:int=1):
+    date_list = redis_conn.lrange('pico_w:date',-count,-1)
+    dates = [date.decode() for date in date_list]
+    all_Data:[Pico_w] = []
+    for date in dates:
+        address_get = redis_conn.hget('pico_w:address',date).decode()
+        temperature_get = redis_conn.hget('pico_w:temperature',date).decode()
+        light_get = redis_conn.hget('pico_w:light',date).decode()
+        item = Pico_w(date=date,address=address_get,temperature=float(temperature_get),light=float(light_get))
+        all_Data.append(item)
+
+    
+    return all_Data
