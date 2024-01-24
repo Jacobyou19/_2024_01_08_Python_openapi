@@ -31,6 +31,7 @@ fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"
 async def read_item(skip: int = 0, limit: int = 10):
     return fake_items_db[skip : skip + limit]
 
+'''
 @app.get("/pico_w/{date}")
 async def read_item(date:str ,address:str,celsius:float,light:float):
     #print(f"日期:{date}")
@@ -52,6 +53,24 @@ async def read_item(date:str ,address:str,celsius:float,light:float):
     print(light_get)
     
     return {"狀態":"儲存成功"}
+'''
+
+
+@app.get("/pico_w/")
+async def read_item(count:int=1):
+    date_get = redis_conn.lrange('pico_w:date',-1,-1)[0].decode()
+    address_get = redis_conn.hget('pico_w:address',date_get).decode()
+    temperature_get = redis_conn.hget('pico_w:temperature',date_get).decode()
+    light_get = redis_conn.hget('pico_w:light',date_get).decode()
+    print(date_get)
+    print(address_get)
+    print(temperature_get)
+    print(light_get)
+    return {'date':date_get,
+            'address':address_get,
+            'temperature':temperature_get,
+            'light':light_get
+            }
 
 
 @app.get("/pico_w/{date}")

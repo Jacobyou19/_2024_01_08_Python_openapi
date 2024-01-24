@@ -23,6 +23,7 @@ def counter(c:int):
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
+#將PICO資料上傳到redis
 @app.get("/pico_w/{date}")
 async def read_item(date:str ,address:str,celsius:float,light:float):
     #print(f"日期:{date}")
