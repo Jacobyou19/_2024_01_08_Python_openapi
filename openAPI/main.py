@@ -4,6 +4,7 @@ import redis
 import os
 from dotenv import load_dotenv
 load_dotenv()
+from pydantic import BaseModel
 redis_conn = redis.Redis.from_url(os.environ.get('REDIS_HOST_PASSWORD'))
 
 app = FastAPI()
@@ -46,6 +47,13 @@ async def read_item(date:str ,address:str,celsius:float,light:float):
     
     return {"狀態":"儲存成功"}
 '''
+#可上資料庫抓資料
+
+class Pico_w(BaseModel):
+    date:str
+    address:str
+    temperature:float
+    light:float
 
 @app.get("/pico_w/")
 async def read_item(count:int=1):
